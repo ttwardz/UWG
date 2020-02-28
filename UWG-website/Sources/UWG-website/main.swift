@@ -18,11 +18,11 @@ struct UWG: Website {
     var name = "Unpublished Writer's Guide to Writing for No One"
     var description = "Written for unpublished writers by an unpublished writer."
     var language: Language { .english }
-    var imagePath: Path? { "images/logo.png" }
-    var title: String = "UWG"
+    var imagePath: Path? { "Resources/logo.png" }
+    var abbreviation: String = "UWG"
 }
 
 try UWG().publish(
-    withTheme: .uwg
+    withTheme: .primary
 //    additionalSteps: [.deploy(using: .gitHub("ttwardz/UWG2.0"))]
 )

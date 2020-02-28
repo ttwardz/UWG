@@ -12,8 +12,7 @@ extension Node where Context == HTML.BodyContext {
     static func posts(for items: [Item<UWG>], on site: UWG, title: String) -> Node {
         return .pageContent(
             .div(
-                .class("posts"),
-                .h1(.class("content-subhead"), .text(title)),
+                .h1(.text(title)),
                 .forEach(items) { item in
                     .postExcerpt(for: item, on: site)
                 }

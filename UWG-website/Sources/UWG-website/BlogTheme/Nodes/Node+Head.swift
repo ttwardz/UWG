@@ -17,6 +17,11 @@ extension Node where Context == HTML.DocumentContext {
             ),
             .link(
                 .rel(.stylesheet),
+                /// ★ My CSS stylesheet.
+                .href("/Resources/Style/theme.css")
+            ),
+            .link(
+                .rel(.stylesheet),
                 .href("https://unpkg.com/purecss@1.0.1/build/pure-min.css"),
                 .init(name: "integrity", value: "sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47"),
                 .init(name: "crossorigin", value: "anonymous")

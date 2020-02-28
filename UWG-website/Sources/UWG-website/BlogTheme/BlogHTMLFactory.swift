@@ -9,7 +9,7 @@ import Publish
 import Plot
 
 extension Theme where Site == UWG {
-    static var uwg: Self {
+    static var primary: Self {
         Theme(
             htmlFactory: UWGHTMLFactory(),
             resourcePaths: ["Resources/Style/theme.css"]

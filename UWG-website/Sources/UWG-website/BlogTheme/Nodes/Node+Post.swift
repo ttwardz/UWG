@@ -13,19 +13,16 @@ extension Node where Context == HTML.BodyContext {
     static func post(for item: Item<UWG>, on site: UWG) -> Node {
         return .pageContent(
             .h2(
-                .class("post-title"),
                 .a(
                     .href(item.path),
                     .text(item.title)
                 )
             ),
             .p(
-                .class("post-meta"),
                 .text(DateFormatter.uwg.string(from: item.date))
             ),
             .tagList(for: item, on: site),
             .div(
-                .class("post-description"),
                 .div(
                     .contentBody(item.body)
                 )
