@@ -9,14 +9,25 @@ import Plot
 
 extension Node where Context == HTML.BodyContext {
     static func footer(for site: UWG) -> Node {
-        return .div(
-            .class("footer pure-u-1"),
-            .div(
-                .class("pure-u-1"),
-                .text("© 2019 \(site.name)")
+        return .footer(
+            .p(
+                .text("Copyright © 2020 Tom Twardzik")
             ),
-            .div(
-                .class("pure-u-1"),
+            .ul(
+                .li(
+                    .a(
+                        .text("Website"),
+                        .href("https://tomtwardzik.com")
+                        )
+                    ),
+                .li(
+                    .a(
+                        .text("Twitter"),
+                        .href("https://twitter.com/ttwardz")
+                    )
+                )
+            ),//END ul
+        .p(
                 .text("Generated using "),
                 .a(
                     .text("Publish"),

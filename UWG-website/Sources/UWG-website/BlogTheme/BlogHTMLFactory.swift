@@ -10,7 +10,10 @@ import Plot
 
 extension Theme where Site == UWG {
     static var uwg: Self {
-        Theme(htmlFactory: UWGHTMLFactory())
+        Theme(
+            htmlFactory: UWGHTMLFactory(),
+            resourcePaths: ["Resources/Style/theme.css"]
+        )
     }
 }
 
