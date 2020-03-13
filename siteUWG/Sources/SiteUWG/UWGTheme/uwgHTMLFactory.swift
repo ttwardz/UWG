@@ -30,10 +30,12 @@ struct UWGHTMLFactory: HTMLFactory {
                 .header(for: context, selectedSection: nil),
                 .div(.class("wrapper"),
                      .latestItem(
-                        for: context.allItems(sortedBy: \.date, order: .descending),
+                        for: context.allItems(
+                            sortedBy: \.date,
+                            order: .descending),
                         on: context.site),
                      .div(
-                        .h2("The Latest"),
+//                        .h2("The Latest"),
                         .itemList(
                             for: context.allItems(
                                 sortedBy: \.date,
@@ -57,8 +59,7 @@ struct UWGHTMLFactory: HTMLFactory {
                 .header(for: context, selectedSection: section.id),
                 .div(
                     .class("wrapper"),
-                    .div(
-                        .class("content"),
+                    .div(.class("content"),
                         .h1(.text(section.title))
                     ),
                     .itemList(for: section.items, on: context.site)
@@ -80,8 +81,7 @@ struct UWGHTMLFactory: HTMLFactory {
                 .div(
                     .class("wrapper"),
                     .br(),
-                    .div(
-                        .class("content"),
+                    .div(.class("content"),
                         .articleBreadcrumb(for: item, on: context.site),
                         .article(
                             .div(
@@ -91,14 +91,15 @@ struct UWGHTMLFactory: HTMLFactory {
                             .span("Tagged with: "),
                             .tagList(for: item, on: context.site)
                         )
-                    ),
-                    .itemList(
-                        for: context.allItems(
-                            sortedBy: \.date,
-                            order: .descending
-                        ),
-                        on: context.site
                     )
+//                    ,
+//                    .itemList(
+//                        for: context.allItems(
+//                            sortedBy: \.date,
+//                            order: .descending
+//                        ),
+//                        on: context.site
+//                    )
                 ),
                 .footer(for: context.site)
             )
@@ -113,9 +114,16 @@ struct UWGHTMLFactory: HTMLFactory {
             .head(for: page, on: context.site),
             .body(
                 .header(for: context, selectedSection: nil),
-                .div(
-                    .class("wrapper"),
-                    .contentBody(page.body)
+                .div(.class("content"),
+                     .contentBody(page.body)
+                ),
+                .h2("The Latest"),
+                .itemList(
+                    for: context.allItems(
+                        sortedBy: \.date,
+                        order: .descending
+                    ),
+                    on: context.site
                 ),
                 .footer(for: context.site)
             )
@@ -263,25 +271,15 @@ private extension Node where Context == HTML.BodyContext {
         
         return .div(
             .class("content"),
-//            .body(
-                .class("item-page"),
-//                .header(for: context, selectedSection: item.sectionID),
-                .div(
-                    .class("content"),
-//                    .class("wrapper"),
-//                    .articleBreadcrumb(for: item, on: context.site),
-//                    .br(),
-                    .article(
-                        .div(
-                            .contentBody(latestItem.body)
-                        )
-//                        .span("Tags: "),
-//                        .tagList(for: latestItem)
+            .class("item-page"),
+            .div(
+                .class("content"),
+                .article(
+                    .div(
+                        .contentBody(latestItem.body)
                     )
                 )
-//            )
-            // Change index ⬇️ to `[0]` when site set live
-//            .text("\(latestItem)")
+            )
         )
     }
 

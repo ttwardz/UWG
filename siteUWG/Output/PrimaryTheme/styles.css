@@ -98,7 +98,9 @@ p {
     margin-bottom: 10px;
 }
 
-.content p {
+article p,
+article ul li,
+article ol li {
     font-family: Georgia, serif;
 }
 
@@ -192,7 +194,7 @@ a {
 
 /* Small screens */
 
-@media(max-width: 600px) {
+@media(max-width: 499px) {
     .wrapper {
         grid-template-areas:
           "ct"
