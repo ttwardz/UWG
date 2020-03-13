@@ -28,22 +28,20 @@ struct UWGHTMLFactory: HTMLFactory {
             .head(for: index, on: context.site),
             .body(
                 .header(for: context, selectedSection: nil),
-                .div(
-                    .class("wrapper"),
-                    .h1(.text(index.title)),
-                    .p(
-                        .class("description"),
-                        .text(context.site.description)
-                    ),
-                    .h2("The Latest"),
-                    .itemList(
-                        for: context.allItems(
-                            sortedBy: \.date,
-                            order: .descending
-                        ),
-                        on: context.site
+                .div(.class("wrapper"),
+                     .latestItem(
+                        for: context.allItems(sortedBy: \.date, order: .descending),
+                        on: context.site),
+                     .div(
+                        .h2("The Latest"),
+                        .itemList(
+                            for: context.allItems(
+                                sortedBy: \.date,
+                                order: .descending),
+                            on: context.site
+                        )
                     )
-                ),
+                ), //END div
                 .footer(for: context.site)
             )
         )
@@ -59,7 +57,10 @@ struct UWGHTMLFactory: HTMLFactory {
                 .header(for: context, selectedSection: section.id),
                 .div(
                     .class("wrapper"),
-                    .h1(.text(section.title)),
+                    .div(
+                        .class("content"),
+                        .h1(.text(section.title))
+                    ),
                     .itemList(for: section.items, on: context.site)
                 ),
                 .footer(for: context.site)
@@ -78,15 +79,18 @@ struct UWGHTMLFactory: HTMLFactory {
                 .header(for: context, selectedSection: item.sectionID),
                 .div(
                     .class("wrapper"),
-                    .articleBreadcrumb(for: item, on: context.site),
                     .br(),
-                    .article(
-                        .div(
-                            .class("content"),
-                            .contentBody(item.body)
-                        ),
-                        .span("Tagged with: "),
-                        .tagList(for: item, on: context.site)
+                    .div(
+                        .class("content"),
+                        .articleBreadcrumb(for: item, on: context.site),
+                        .article(
+                            .div(
+                                .class("content"),
+                                .contentBody(item.body)
+                            ),
+                            .span("Tagged with: "),
+                            .tagList(for: item, on: context.site)
+                        )
                     ),
                     .itemList(
                         for: context.allItems(
@@ -157,22 +161,25 @@ struct UWGHTMLFactory: HTMLFactory {
                 .header(for: context, selectedSection: nil),
                 .div(
                     .class("wrapper"),
-                    .h1(
-                        "Tagged with ",
-                        .span(.class("tag"), .text(page.tag.string))
-                    ),
-                    .a(
-                        .class("browse-all"),
-                        .text("Browse all tags"),
-                        .href(context.site.tagListPath)
-                    ),
-                    .itemList(
-                        for: context.items(
-                            taggedWith: page.tag,
-                            sortedBy: \.date,
-                            order: .descending
+                    .div(
+                        .class("content"),
+                        .h1(
+                            "Tagged with ",
+                            .span(.class("tag"), .text(page.tag.string))
                         ),
-                        on: context.site
+                        .a(
+                            .class("browse-all"),
+                            .text("Browse all tags"),
+                            .href(context.site.tagListPath)
+                        ),
+                        .itemList(
+                            for: context.items(
+                                taggedWith: page.tag,
+                                sortedBy: \.date,
+                                order: .descending
+                            ),
+                            on: context.site
+                        )
                     )
                 ),
                 .footer(for: context.site)
@@ -204,8 +211,7 @@ private extension Node where Context == HTML.BodyContext {
             .text("Unpublished Writer's Guide to Writing for No One"),
             .href("/")
             ),
-          .if(
-            sectionIDs.count > 1,
+          .if(sectionIDs.count > 1,
             .nav(
                 .ul(.forEach(sectionIDs) { section in
                     .li(.a(
@@ -214,20 +220,21 @@ private extension Node where Context == HTML.BodyContext {
                         .text(context.sections[section].title)
                         ))
                     })
-                ))
+                )
             )
         )
-    }
+    )}
     
     static func articleBreadcrumb<SiteUWG: Website>(for item: Item<SiteUWG>, on site: SiteUWG) -> Node {
-        return .span(
+        return .div(
+            .class("breadcrumb"),
             .a(
                 .text("Articles"),
                 .href("/articles/")
             ),
             .text("  →  "),
             .a(
-                .text("\(item.tags[0])"),
+                .text("\(item.tags[0].string.capitalized)"),
                 .href("/tags/\(item.tags[0])/")
             ),
             .text("  →  "),
@@ -250,6 +257,33 @@ private extension Node where Context == HTML.BodyContext {
             }
         )
     }
+    
+    static func latestItem<SiteUWG: Website>(for items: [Item<SiteUWG>], on site: SiteUWG) -> Node {
+        let latestItem = items[1]
+        
+        return .div(
+            .class("content"),
+//            .body(
+                .class("item-page"),
+//                .header(for: context, selectedSection: item.sectionID),
+                .div(
+                    .class("content"),
+//                    .class("wrapper"),
+//                    .articleBreadcrumb(for: item, on: context.site),
+//                    .br(),
+                    .article(
+                        .div(
+                            .contentBody(latestItem.body)
+                        )
+//                        .span("Tags: "),
+//                        .tagList(for: latestItem)
+                    )
+                )
+//            )
+            // Change index ⬇️ to `[0]` when site set live
+//            .text("\(latestItem)")
+        )
+    }
 
     static func tagList<SiteUWG: Website>(for item: Item<SiteUWG>, on site: SiteUWG) -> Node {
         return .ul(.class("tag-list"), .forEach(item.tags) { tag in
@@ -262,6 +296,9 @@ private extension Node where Context == HTML.BodyContext {
     
     static func footer<SiteUWG: Website>(for site: SiteUWG) -> Node {
         return .footer(
+            .p(
+                .text("Copyright &#169; 2020 Tom Twardzik")
+            ),
             .p(
                 .text("Generated using "),
                 .a(

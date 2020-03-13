@@ -1,0 +1,184 @@
+/* Styles */
+
+html {
+	padding: 1rem;
+  font-size: 1em;
+  /* height: 100%; */
+}
+
+body {
+  color: var(--text-color);
+  background-color: var(--text-flip);
+  font-size: 1.25rem;
+}
+
+h1,
+h2,
+nav,
+.label {
+  font-family: Helvetica, sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 36px;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+.label {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+a {
+  color: var(--text-color);
+}
+
+
+/* The Grid */
+
+.container {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "main side"
+    "footer footer";
+    
+  /* height: 100vh; */
+  grid-template-columns: 1fr 200px;
+  grid-template-rows: auto 1fr auto;
+  grid-gap: 10px;
+}
+
+.container > * {
+  padding: 1rem;
+/*  border: 1px solid orange; */
+}
+
+header {
+  color: white;
+  background: var(--background);
+  grid-area: header;
+}
+
+nav {
+  
+}
+
+nav ul {
+  /* Creates a flex container. */
+  display: flex;
+  
+  justify-content: space-between;
+  align-items: center;
+  
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  /* Make the links a flex container within the flex container. */
+}
+
+nav ul a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 2px;
+}
+
+nav ul a:hover {
+  background-color: var(--background2);
+  color: white;
+}
+
+nav ul a.active {
+  background-color: white;
+  color: var(--background);
+}
+
+main {
+  grid-area: main;
+
+  background: var(--text-flip);
+}
+
+aside {
+  grid-area: side;
+  
+  background: var(--background2);
+}
+
+aside ul {
+  list-style-type: decimal;
+}
+
+aside ul,
+aside ul a {
+  color: white;
+}
+
+footer {
+  grid-area: footer;
+
+  background: var(--background);
+}
+
+footer {
+  color: white;
+}
+
+footer ul {
+  /* Creates a flex container. */
+  display: flex;
+  
+  justify-content: flex-start;
+  align-items: center;
+  
+  list-style-type: none;
+  padding: 0;
+}
+
+footer ul a {
+  color: white;
+  padding: 0px 12px 0px 0px;
+}
+
+
+/* Small screens */
+
+@media (max-width: 799px) {
+  .container {
+    grid-template-areas:
+      "header"
+      "nav"
+      "main"
+      "side"
+      "footer";
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Themes */
+
+:root {
+  --background: rgb(255,132,68);
+  --background2: rgb(15, 76, 129);
+  --text-color: black;
+  --text-flip: white;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+	  --background: rgba(255,132,68,0.8);
+	  --background2: rgba(15, 76, 129, 0.5);
+	  --text-color: white;
+	  --text-flip: black;
+	}
+}
