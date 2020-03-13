@@ -13,18 +13,19 @@ import Plot
 struct SiteUWG: Website {
     enum SectionID: String, WebsiteSectionID {
         // Add the sections that you want your website to contain here:
-        case posts
+        case articles
         case about
     }
 
     struct ItemMetadata: WebsiteItemMetadata {
         // Add any site-specific metadata that you want to use here.
+        var title: String
     }
 
     // Update these properties to configure your website:
     var url = URL(string: "https://unpublishedwritersguide.com/")!
     var name = "Unpublished Writer's Guide to Writing for No One"
-    var description = "Resources and discussion for unpublished writers by an unpublished writer."
+    var description = "Resources and discussion written for unpublished writers by an unpublished writer."
     var language: Language { .english }
     var imagePath: Path? { nil }
 }

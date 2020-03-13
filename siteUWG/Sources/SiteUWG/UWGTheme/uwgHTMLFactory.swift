@@ -35,7 +35,7 @@ struct UWGHTMLFactory: HTMLFactory {
                         .class("description"),
                         .text(context.site.description)
                     ),
-                    .h2("Latest content"),
+                    .h2("The Latest"),
                     .itemList(
                         for: context.allItems(
                             sortedBy: \.date,
@@ -78,6 +78,8 @@ struct UWGHTMLFactory: HTMLFactory {
                 .header(for: context, selectedSection: item.sectionID),
                 .div(
                     .class("wrapper"),
+                    .articleBreadcrumb(for: item, on: context.site),
+                    .br(),
                     .article(
                         .div(
                             .class("content"),
@@ -85,6 +87,13 @@ struct UWGHTMLFactory: HTMLFactory {
                         ),
                         .span("Tagged with: "),
                         .tagList(for: item, on: context.site)
+                    ),
+                    .itemList(
+                        for: context.allItems(
+                            sortedBy: \.date,
+                            order: .descending
+                        ),
+                        on: context.site
                     )
                 ),
                 .footer(for: context.site)
@@ -207,6 +216,22 @@ private extension Node where Context == HTML.BodyContext {
                     })
                 ))
             )
+        )
+    }
+    
+    static func articleBreadcrumb<SiteUWG: Website>(for item: Item<SiteUWG>, on site: SiteUWG) -> Node {
+        return .span(
+            .a(
+                .text("Articles"),
+                .href("/articles/")
+            ),
+            .text("  →  "),
+            .a(
+                .text("\(item.tags[0])"),
+                .href("/tags/\(item.tags[0])/")
+            ),
+            .text("  →  "),
+            .text(item.title)
         )
     }
     

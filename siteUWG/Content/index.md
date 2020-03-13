@@ -1,1 +1,1 @@
-# Welcome to SiteUWG!
+# Welcome to UWG
