@@ -29,13 +29,8 @@ struct UWGHTMLFactory: HTMLFactory {
             .body(
                 .header(for: context, selectedSection: nil),
                 .div(.class("wrapper"),
-                     .latestItem(
-                        for: context.allItems(
-                            sortedBy: \.date,
-                            order: .descending),
-                        on: context.site),
-                     .div(
-//                        .h2("The Latest"),
+                     .div(.class("content"),
+                        .h2("The Latest"),
                         .itemList(
                             for: context.allItems(
                                 sortedBy: \.date,
@@ -43,7 +38,16 @@ struct UWGHTMLFactory: HTMLFactory {
                             on: context.site
                         )
                     )
-                ), //END div
+//                     .div(
+////                        .h2("The Latest"),
+//                        .itemList(
+//                            for: context.allItems(
+//                                sortedBy: \.date,
+//                                order: .descending),
+//                            on: context.site
+//                        )
+//                    ),
+                ), //END grid
                 .footer(for: context.site)
             )
         )
@@ -60,10 +64,13 @@ struct UWGHTMLFactory: HTMLFactory {
                 .div(
                     .class("wrapper"),
                     .div(.class("content"),
-                        .h1(.text(section.title))
+                        .h1(.text(section.title)),
+                        .fullItemList(for: section.items, on: context.site)
                     ),
-                    .itemList(for: section.items, on: context.site)
-                ),
+                    .div(.class("sidebar"),
+                        .itemList(for: section.items, on: context.site)
+                    )
+                ), //END grid
                 .footer(for: context.site)
             )
         )
@@ -85,7 +92,7 @@ struct UWGHTMLFactory: HTMLFactory {
                         .articleBreadcrumb(for: item, on: context.site),
                         .article(
                             .div(
-                                .class("content"),
+//                                .class("content"),
                                 .contentBody(item.body)
                             ),
                             .span("Tagged with: "),
@@ -117,13 +124,16 @@ struct UWGHTMLFactory: HTMLFactory {
                 .div(.class("content"),
                      .contentBody(page.body)
                 ),
-                .h2("The Latest"),
-                .itemList(
-                    for: context.allItems(
-                        sortedBy: \.date,
-                        order: .descending
-                    ),
-                    on: context.site
+                .div(
+                    .class("sidebar"),
+                    .h2("The Latest"),
+                    .itemList(
+                        for: context.allItems(
+                            sortedBy: \.date,
+                            order: .descending
+                        ),
+                        on: context.site
+                    )
                 ),
                 .footer(for: context.site)
             )
@@ -140,18 +150,21 @@ struct UWGHTMLFactory: HTMLFactory {
                 .header(for: context, selectedSection: nil),
                 .div(
                     .class("wrapper"),
-                    .h1("Browse all tags"),
-                    .ul(
-                        .class("all-tags"),
-                        .forEach(page.tags.sorted()) { tag in
-                            .li(
-                                .class("tag"),
-                                .a(
-                                    .href(context.site.path(for: tag)),
-                                    .text(tag.string)
+                    .div(
+                        .class("content"),
+                        .h1("Browse all tags"),
+                        .ul(
+                            .class("all-tags"),
+                            .forEach(page.tags.sorted()) { tag in
+                                .li(
+                                    .class("tag"),
+                                    .a(
+                                        .href(context.site.path(for: tag)),
+                                        .text(tag.string)
+                                    )
                                 )
-                            )
-                        }
+                            }
+                        )
                     )
                 ),
                 .footer(for: context.site)
@@ -179,15 +192,15 @@ struct UWGHTMLFactory: HTMLFactory {
                             .class("browse-all"),
                             .text("Browse all tags"),
                             .href(context.site.tagListPath)
-                        ),
-                        .itemList(
-                            for: context.items(
-                                taggedWith: page.tag,
-                                sortedBy: \.date,
-                                order: .descending
-                            ),
-                            on: context.site
                         )
+//                        .itemList(
+//                            for: context.items(
+//                                taggedWith: page.tag,
+//                                sortedBy: \.date,
+//                                order: .descending
+//                            ),
+//                            on: context.site
+//                        )
                     )
                 ),
                 .footer(for: context.site)
@@ -251,6 +264,25 @@ private extension Node where Context == HTML.BodyContext {
     }
     
     static func itemList<SiteUWG: Website>(for items: [Item<SiteUWG>], on site: SiteUWG) -> Node {
+        
+        let recentItems = items.prefix(3)
+        
+        return .ul(
+            .class("item-list"),
+            .forEach(recentItems) { item in
+                .li(.article(
+                    .h1(.a(
+                        .href(item.path),
+                        .text(item.title)
+                    )),
+                    .tagList(for: item, on: site),
+                    .p(.text(item.description))
+                ))
+            }
+        )
+    }
+    
+    static func fullItemList<SiteUWG: Website>(for items: [Item<SiteUWG>], on site: SiteUWG) -> Node {
         return .ul(
             .class("item-list"),
             .forEach(items) { item in

@@ -22,9 +22,7 @@ body {
     text-align: left;
     
     display: grid;
-    grid-template-areas:
-    "ct li"
-    "ft ft";
+    grid-template-areas: "ct sd";
     grid-template-columns: 1fr 200px;
     grid-gap: 12px;
 }
@@ -69,8 +67,8 @@ nav li a.selected {
     margin-bottom: 40px;
 }
 
-.item-list {
-    grid-area: li;
+.sidebar {
+    grid-area: sd;
 }
 
 footer {
@@ -102,6 +100,11 @@ article p,
 article ul li,
 article ol li {
     font-family: Georgia, serif;
+}
+
+article ul,
+article ol li {
+    text-indent: 12px;
 }
 
 a {
@@ -198,8 +201,7 @@ a {
     .wrapper {
         grid-template-areas:
           "ct"
-          "li"
-          "ft";
+          "sd";
         padding: 40px 20px;
     }
 }

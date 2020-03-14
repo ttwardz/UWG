@@ -9,15 +9,15 @@ Writing is hard. Yet, many people do it for no one, for free, for _fun_. Why?
 
 The answers are various:
 
-* It's fun to imagine stories.
-* It's fascinating to explore other minds.
-* It's thrilling.
-* It's therapeutic.
-* It's cathartic.
-* It's my dream.
-* I love the art of arranging words.
-* I love reading and reading makes me want to write stories.
-* I cannot stop myself from telling stories.
+- It's fun to imagine stories.
+- It's fascinating to explore other minds.
+- It's thrilling.
+- It's therapeutic.
+- It's cathartic.
+- It's my dream.
+- I love the art of arranging words.
+- I love reading and reading makes me want to write stories.
+- I cannot stop myself from telling stories.
 
 Artists of other media and trades must use the same reasons among their friends and peers. It's natural for us. For non-artists, though, these answers are unsatisfactory. _You're not being published. You're not being paid. Is anyone reading what you write?_
 
