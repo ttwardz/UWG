@@ -22,13 +22,17 @@ body {
     text-align: left;
     
     display: grid;
-    grid-template-areas: "ct sd";
+    grid-template-areas:
+        "hd hd"
+        "ct sd"
+        "ft ft";
     grid-template-columns: 1fr 200px;
     grid-gap: 12px;
 }
 
 header {
     grid-area: hd;
+    
     background-color: var(--header-bg);
     color: #fff;
 }
@@ -64,6 +68,7 @@ nav li a.selected {
 
 .content {
     grid-area: ct;
+    
     margin-bottom: 40px;
 }
 
@@ -102,10 +107,10 @@ article ol li {
     font-family: Georgia, serif;
 }
 
-article ul,
-article ol li {
-    text-indent: 12px;
-}
+/*article ul,*/
+/*article ol li {*/
+/*    text-indent: 12px;*/
+/*}*/
 
 a {
     color: inherit;
@@ -197,11 +202,14 @@ a {
 
 /* Small screens */
 
-@media(max-width: 499px) {
+@media(max-width: 799px) {
     .wrapper {
         grid-template-areas:
+          "hd"
           "ct"
-          "sd";
+          "sd"
+          "ft";
+          grid-template-columns: 1fr;
         padding: 40px 20px;
     }
 }
