@@ -1,11 +1,11 @@
 ---
 tags: philosophy
 title: Why Write for No One?
+description: Writing is hard. Yet, many of us do it for no one, for free, for fun. Why?
+author: Tom Twardzik
 ---
 
-# Why Write for No One?
-
-Writing is hard. Yet, many people do it for no one, for free, for _fun_. Why?
+Writing is hard. Yet, many of us do it for no one, for free, for _fun_. Why?
 
 The answers are various:
 

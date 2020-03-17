@@ -5,6 +5,7 @@
 //  Created by Tommy Twardzik on 3/11/20.
 //
 
+import Foundation
 import Publish
 import Plot
 
@@ -28,14 +29,17 @@ struct UWGHTMLFactory: HTMLFactory {
             .head(for: index, on: context.site),
             .body(
                 .wrapper(
-                    .header(for: context, selectedSection: nil),
+                    .header(for: context, selectedSection: nil, page: nil),
                     .content(
                         .latestItem(
                             for: context.allItems(sortedBy: \.date, order: .descending),
                                 on: context.site)
                     ),
                     .sidebar(
-                        .h2("The Latest"),
+                        .div(
+                            .class("label"),
+                            .text("The Latest")
+                        ),
                         .recentItemsList(
                             for: context.allItems(
                                 sortedBy: \.date,
@@ -57,13 +61,16 @@ struct UWGHTMLFactory: HTMLFactory {
             .head(for: section, on: context.site),
             .body(
                 .wrapper(
-                    .header(for: context, selectedSection: section.id),
+                    .header(for: context, selectedSection: section.id, page: nil),
                     .content(
                         .h1(.text(section.title)),
                         .fullItemList(for: section.items, on: context.site)
                     ),
                     .sidebar(
-                        .h2("The Latest"),
+                        .div(
+                            .class("label"),
+                            .text("The Latest")
+                        ),("The Latest"),
                         .recentItemsList(for: section.items, on: context.site)
                     ),
                     .footer(for: context.site)
@@ -81,11 +88,12 @@ struct UWGHTMLFactory: HTMLFactory {
             .body(
                 .class("item-page"),
                 .wrapper(
-                    .header(for: context, selectedSection: item.sectionID),
-                    .br(),
+                    .header(for: context, selectedSection: item.sectionID, page: nil),
                     .content(
                         .articleBreadcrumb(for: item, on: context.site),
+                        .articleDateAndTime(for: item, on: context.site),
                         .article(
+                            .articleH1AndAuthor(for: item, on: context.site),
                             .div(
                                 .contentBody(item.body)
                             ),
@@ -94,7 +102,10 @@ struct UWGHTMLFactory: HTMLFactory {
                         )
                     ),
                     .sidebar(
-                        .h2("The Latest"),
+                        .div(
+                            .class("label"),
+                            .text("The Latest")
+                        ),
                         .recentItemsList(
                             for: context.allItems(
                                 sortedBy: \.date,
@@ -116,12 +127,15 @@ struct UWGHTMLFactory: HTMLFactory {
             .head(for: page, on: context.site),
             .body(
                 .wrapper(
-                    .header(for: context, selectedSection: nil),
+                    .header(for: context, selectedSection: nil, page: page),
                     .content(
                         .contentBody(page.body)
                     ),
                     .sidebar(
-                        .h2("The Latest"),
+                        .div(
+                            .class("label"),
+                            .text("The Latest")
+                        ),("The Latest"),
                         .recentItemsList(
                             for: context.allItems(
                                 sortedBy: \.date,
@@ -144,7 +158,7 @@ struct UWGHTMLFactory: HTMLFactory {
             .head(for: page, on: context.site),
             .body(
                 .wrapper(
-                    .header(for: context, selectedSection: nil),
+                    .header(for: context, selectedSection: nil, page: nil),
                     .content(
                         .h1("Browse all tags"),
                         .ul(
@@ -177,7 +191,7 @@ struct UWGHTMLFactory: HTMLFactory {
             .head(for: page, on: context.site),
             .body(
                 .wrapper(
-                    .header(for: context, selectedSection: nil),
+                    .header(for: context, selectedSection: nil, page: nil),
                     .content(
                         .h1(
                             "Tagged with ",
@@ -225,82 +239,78 @@ private extension Node where Context == HTML.BodyContext {
         .div(.class("sidebar"), .group(nodes))
     }
     
-    
-    static func header<T: Website>(
-        for context: PublishingContext<T>,
-        selectedSection: T.SectionID?
+    static func header<SiteUWG: Website>(
+        for context: PublishingContext<SiteUWG>,
+        selectedSection: SiteUWG.SectionID?,
+        page: Page?
     ) -> Node {
-        let sectionIDs = T.SectionID.allCases
+        let sectionIDs = SiteUWG.SectionID.allCases
         
         return .header(
-//            .wrapper(
+            .div(
+                .class("hdWrapper"),
                 .a(
                     .class("site-name"),
                     .text("Unpublished Writer's Guide to Writing for No One"),
                     .href("/")
                 ),
-                .if(sectionIDs.count > 1,
-                    .nav(
-                        .ul(.forEach(sectionIDs) { section in
-                            .li(.a(
-                                .class(section == selectedSection ? "selected" : ""),
-                                .href(context.sections[section].path),
-                                .text(context.sections[section].title)
-                                ))
-                            })
+                .nav(
+                    .ul(.forEach(sectionIDs) { section in
+                        .li(.a(
+                            .class(section == selectedSection ? "selected" : ""),
+                            .href(context.sections[section].path),
+                            .text(context.sections[section].title)
+                            ))
+                        },
+                        .li(.a(
+                            .class(page?.path.string.contains("about") ?? false == true ? "selected" : ""),
+                            .href("/about"),
+                            .text("About")
+                            ))
+                        )
                     )
                 )
-//            )
-        )}
-    
-    static func articleBreadcrumb<SiteUWG: Website>(for item: Item<SiteUWG>, on site: SiteUWG) -> Node {
-        return .div(
-            .class("breadcrumb"),
-            .a(
-                .text("Articles"),
-                .href("/articles/")
-            ),
-            .text("  →  "),
-            .a(
-                .text("\(item.tags[0].string.capitalized)"),
-                .href("/tags/\(item.tags[0])/")
-            ),
-            .text("  →  "),
-            .text(item.title)
-        )
-    }
+            )
+        }
     
     static func recentItemsList<SiteUWG: Website>(for items: [Item<SiteUWG>], on site: SiteUWG) -> Node {
         
         let recentItems = items.prefix(3)
         
         return .ul(
-            .class("item-list"),
+            .class("recent-item-list"),
             .forEach(recentItems) { item in
                 .li(.article(
                     .h1(.a(
                         .href(item.path),
                         .text(item.title)
                     )),
-                    .tagList(for: item, on: site),
-                    .p(.text(item.description))
+                    .tagList(for: item, on: site)
                 ))
             }
         )
     }
     
     static func fullItemList<SiteUWG: Website>(for items: [Item<SiteUWG>], on site: SiteUWG) -> Node {
+        
+        let formatter1 = DateFormatter()
+        formatter1.dateFormat = "MMM dd, yyyy"
+        
         return .ul(
-            .class("item-list"),
+            .class("full-item-list"),
             .forEach(items) { item in
-                .li(.article(
-                    .h1(.a(
-                        .href(item.path),
-                        .text(item.title)
-                    )),
-                    .tagList(for: item, on: site),
-                    .p(.text(item.description))
-                ))
+                .li(
+                    .article(
+                        .h1(.a(
+                            .href(item.path),
+                            .text(item.title)
+                            )
+                        ),
+                        .p(.text(formatter1.string(from: item.date))),
+                        .p(.text(item.description)),
+                        .tagList(for: item, on: site)
+                    )
+                )
             }
         )
     }
@@ -312,6 +322,12 @@ private extension Node where Context == HTML.BodyContext {
             .class("item-page"),
             .div(
                 .article(
+                    .articleDateAndTime(for: latestItem, on: site),
+                    .h1(.a(
+                        .text(latestItem.title),
+                        .href(latestItem.path)
+                        )),
+//                    .p("by \(latestItem.author)"),
                     .div(
                         .contentBody(latestItem.body)
                     )
