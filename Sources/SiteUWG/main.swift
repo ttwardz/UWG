@@ -30,4 +30,8 @@ struct SiteUWG: Website {
     var imagePath: Path? { nil }
 }
 
-try SiteUWG().publish(withTheme: .primary)
+try SiteUWG().publish(
+    withTheme: .primary
+//    ,
+//    additionalSteps: [.deploy(using: .gitHub("ttwardz/UWG2.0"))]
+)
