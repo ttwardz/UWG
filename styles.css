@@ -94,7 +94,8 @@ h1 {
     font-size: 2em;
 }
 
-h2 {
+h2,
+h3 {
     margin: 20px 0;
 }
 
@@ -161,6 +162,26 @@ blockquote p {
 
 blockquote p:last-child {
     margin-bottom: 0;
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+table, tr, td {
+    font-family: Georgia, serif;
+    border: 1px solid var(--tag-bg);
+    padding: 12px;
+}
+
+tr, td {
+    text-align: center;
+}
+
+td {
+    vertical-align: middle;
 }
 
 hr {
